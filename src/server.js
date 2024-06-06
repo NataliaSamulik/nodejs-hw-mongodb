@@ -22,13 +22,21 @@ export const setupServer = () => {
   );
 
   app.get('/contacts', async (req, res) => {
-    const contacts = await getAllContacts();
+    try {
+      const contacts = await getAllContacts();
 
-    res.status(200).json({
-      status: res.statusCode,
-      message: 'Successfully found contacts!',
-      data: contacts,
-    });
+      res.status(200).json({
+        status: res.statusCode,
+        message: 'Successfully found contacts!',
+        data: contacts,
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({
+        message: 'Something went wrong',
+        error: err.message,
+      });
+    }
   });
 
   app.get('/contacts/:contactId', async (req, res) => {
@@ -51,6 +59,10 @@ export const setupServer = () => {
       });
     } catch (err) {
       console.error(err);
+      res.status(500).json({
+        message: 'Something went wrong',
+        error: err.message,
+      });
     }
   });
 
