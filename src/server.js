@@ -1,11 +1,9 @@
 import express from 'express';
-// import { env } from './utils/env.js';
 import pino from 'pino-http';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import { getAllContacts, getContactById } from './services/contacts.js';
 
-// const PORT = Number(env('PORT', '3000'));
 const PORT = process.env.PORT || 3000;
 
 export const setupServer = () => {
@@ -51,6 +49,12 @@ export const setupServer = () => {
 
     try {
       const contact = await getContactById(contactId);
+      if(!contact){
+       return res.status(404).json({
+        status:404,
+        message: `Contact with id ${contactId} not found`
+       });
+      }
 
       res.status(200).json({
         status: 200,
