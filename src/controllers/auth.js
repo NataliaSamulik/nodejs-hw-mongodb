@@ -1,5 +1,12 @@
 import { THIRTY_DAYS } from '../constants/index.js';
-import { loginUser, logoutUser, refreshUsersSession, registerUser } from '../services/auth.js';
+import {
+  loginUser,
+  logoutUser,
+  refreshUsersSession,
+  registerUser,
+  requestResetToken,
+  resetPassword,
+} from '../services/auth.js';
 
 export const registerUserController = async (req, res) => {
   const user = await registerUser(req.body);
@@ -42,29 +49,49 @@ const setupSession = (res, session) => {
 };
 
 export const refreshUserSessionController = async (req, res) => {
-    const session = await refreshUsersSession({
-        sessionId: req.cookies.sessionId,
-        refreshToken: req.cookies.refreshToken,
-    });
+  const session = await refreshUsersSession({
+    sessionId: req.cookies.sessionId,
+    refreshToken: req.cookies.refreshToken,
+  });
 
-    setupSession(res, session);
+  setupSession(res, session);
 
-    res.json({
-        status: 200,
-        message: 'Successfully refreshed a session!',
-        data: {
-            accessToken: session.accessToken,
-        },
-    });
+  res.json({
+    status: 200,
+    message: 'Successfully refreshed a session!',
+    data: {
+      accessToken: session.accessToken,
+    },
+  });
 };
 
-export const logoutUserController = async (req, res) =>{
-if(req.cookies.sessionId){
+export const logoutUserController = async (req, res) => {
+  if (req.cookies.sessionId) {
     await logoutUser(req.cookies.sessionId);
-}
+  }
 
-res.clearCookie('sessionId');
-res.clearCookie('refreshToken');
+  res.clearCookie('sessionId');
+  res.clearCookie('refreshToken');
 
-res.status(204).send();
+  res.status(204).send();
+};
+
+export const requestResetEmailControllers = async (req, res) => {
+  await requestResetToken(req.body.email);
+
+  res.json({
+    status: 200,
+    message: 'Reset password email has been successfully sent.',
+    data: {},
+  });
+};
+
+export const resetPasswordController = async (req, res)=>{
+  await resetPassword(req.body);
+
+  res.json({
+    message: 'Password was successfully reset!',
+    status: 200,
+    data: {},
+  });
 };
