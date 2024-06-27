@@ -1,5 +1,10 @@
 import path from 'node:path';
 
+export const ENV_VARS ={
+  JWT_SECRET: "JWT_SECRET",
+  APP_DOMAIN: "APP_DOMAIN",
+};
+
 export const SORT_ORDER = {
   ASC: 'asc',
   DESC: 'desc',
