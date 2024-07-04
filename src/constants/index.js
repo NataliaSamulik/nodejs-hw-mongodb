@@ -3,6 +3,7 @@ import path from 'node:path';
 export const ENV_VARS = {
   JWT_SECRET: 'JWT_SECRET',
   APP_DOMAIN: 'APP_DOMAIN',
+  ENABLE_CLOUDINARY: 'ENABLE_CLOUDINARY',
 };
 
 export const SORT_ORDER = {
